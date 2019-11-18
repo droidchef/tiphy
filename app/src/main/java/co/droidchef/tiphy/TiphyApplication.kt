@@ -6,7 +6,7 @@ import co.droidchef.tiphy.di.DaggerApplicationComponent
 
 class TiphyApplication : Application() {
 
-    private val component: ApplicationComponent = DaggerApplicationComponent.builder().build()
+    val component: ApplicationComponent = DaggerApplicationComponent.builder().build()
 
     override fun onCreate() {
         super.onCreate()
