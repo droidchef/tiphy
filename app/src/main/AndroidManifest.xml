@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="co.droidchef.tiphy">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".TiphyApplication"
         android:allowBackup="true"
