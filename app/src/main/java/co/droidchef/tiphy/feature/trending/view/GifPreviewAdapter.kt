@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import co.droidchef.tiphy.R
 import co.droidchef.tiphy.network.model.response.Giphy
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class GifPreviewAdapter(
     private val context: Context,
@@ -49,10 +50,13 @@ class GifPreviewAdapter(
         private val ivGifPreview: ImageView = itemView.findViewById(R.id.iv_preview)
 
         fun bind(context: Context, giphy: Giphy, onGiphyClickListener: OnGiphyClickListener) {
-            Glide.with(context).load(giphy.images.previewGif.url).into(ivGifPreview)
+            Glide.with(context).load(giphy.images.previewGif.url).diskCacheStrategy(
+                DiskCacheStrategy.AUTOMATIC
+            ).into(ivGifPreview)
             ivGifPreview.setOnClickListener { onGiphyClickListener.onGiphyClick(giphy) }
         }
     }
 
 
 }
+
