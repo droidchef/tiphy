@@ -16,6 +16,10 @@ class TrendingGifsViewModel @Inject constructor(
 
     val giphiesLiveData: LiveData<ArrayList<Giphy>> = _giphiesLiveData
 
+    private val _originalGiphyLiveData = MutableLiveData<String>()
+
+    val originalGipyLiveData: LiveData<String> = _originalGiphyLiveData
+
     var pageNumber = 0L
 
     var pageSize = 25L
@@ -68,5 +72,8 @@ class TrendingGifsViewModel @Inject constructor(
         return pageSize
     }
 
+    fun onGiphyClicked(giphy: Giphy) {
+        _originalGiphyLiveData.postValue(giphy.images.original.url)
+    }
 
 }

@@ -1,5 +1,6 @@
 package co.droidchef.tiphy.feature.trending.view
 
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import co.droidchef.tiphy.R
 import co.droidchef.tiphy.TiphyApplication
+import co.droidchef.tiphy.feature.detail.GifDetailActivity
 import co.droidchef.tiphy.feature.trending.di.TrendingModule
 import co.droidchef.tiphy.feature.trending.viewmodel.TrendingGifsViewModel
 import co.droidchef.tiphy.network.model.response.Giphy
@@ -76,6 +78,13 @@ class TrendingGifsActivity : AppCompatActivity(), OnGiphyClickListener {
             }
         })
 
+        viewModel.originalGipyLiveData.observe(this, Observer {
+
+            val intent = Intent(this,GifDetailActivity::class.java)
+            intent.putExtra("ORIGINAL_URL", it)
+            startActivity(intent)
+        })
+
         viewModel.showTrendingGifs()
     }
 
@@ -92,6 +101,7 @@ class TrendingGifsActivity : AppCompatActivity(), OnGiphyClickListener {
 
     override fun onGiphyClick(giphy: Giphy) {
         Toast.makeText(this, giphy.id, Toast.LENGTH_LONG).show()
+        viewModel.onGiphyClicked(giphy)
     }
 
 }
