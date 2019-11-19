@@ -4,6 +4,8 @@ import co.droidchef.spyspanner.arch.UseCase
 import co.droidchef.spyspanner.arch.UseCaseBuilder
 import co.droidchef.tiphy.network.model.response.TrendingGifsResponse
 import co.droidchef.tiphy.network.service.GiphyService
+import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
@@ -24,8 +26,16 @@ class FetchTrendingGifsUseCaseBuilder @Inject constructor(private val giphyServi
         return this
     }
 
+    private var scheduler: Scheduler = Schedulers.io()
+
+    fun withScheduler(scheduler: Scheduler): FetchTrendingGifsUseCaseBuilder {
+        this.scheduler = scheduler
+        return this
+    }
+
+
     override fun build(): UseCase<TrendingGifsResponse> {
-        return FetchTrendingGifsUseCase(giphyService, pageNumber, pageSize)
+        return FetchTrendingGifsUseCase(giphyService, pageNumber, pageSize, scheduler)
     }
 
 }

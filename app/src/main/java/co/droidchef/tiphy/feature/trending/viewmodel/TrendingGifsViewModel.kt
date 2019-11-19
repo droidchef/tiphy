@@ -22,7 +22,7 @@ class TrendingGifsViewModel @Inject constructor(
 
     var pageNumber = 0L
 
-    var pageSize = 25L
+    var pageSize = 50L
 
     fun showTrendingGifs() {
 
@@ -46,6 +46,8 @@ class TrendingGifsViewModel @Inject constructor(
     }
 
     fun loadMore() {
+
+        println("LOAD MORE TRIGGERED")
 
         val disposable = fetchTrendingGifsUseCaseBuilder
             .forPage(pageNumber + pageSize)

@@ -4,15 +4,13 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import co.droidchef.tiphy.R
 import co.droidchef.tiphy.TiphyApplication
 import co.droidchef.tiphy.feature.detail.GifDetailActivity
@@ -33,12 +31,13 @@ class TrendingGifsActivity : AppCompatActivity(), OnGiphyClickListener {
 
     private lateinit var gifPreviewAdapter: GifPreviewAdapter
 
-    private lateinit var layoutManager: GridLayoutManager
+    private lateinit var layoutManager: StaggeredGridLayoutManager
 
     var pastVisiblesItems: Int = 0
     var visibleItemCount: Int = 0
     var totalItemCount: Int = 0
 
+    var intArray = IntArray(3)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -49,11 +48,11 @@ class TrendingGifsActivity : AppCompatActivity(), OnGiphyClickListener {
         viewModel = ViewModelProviders.of(this, viewModelFactory)[TrendingGifsViewModel::class.java]
 
         rvGifsPreviewList = findViewById(R.id.rvGifsGrid)
-        layoutManager = GridLayoutManager(this, 3)
+        layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         rvGifsPreviewList.layoutManager = layoutManager
         gifPreviewAdapter =
             GifPreviewAdapter(this, arrayListOf(), this)
-        rvGifsPreviewList.addItemDecoration(VerticalSpaceItemDecoration(16))
+        //rvGifsPreviewList.addItemDecoration(VerticalSpaceItemDecoration(16))
         gifPreviewAdapter.setHasStableIds(true)
         rvGifsPreviewList.adapter = gifPreviewAdapter
 
@@ -68,9 +67,12 @@ class TrendingGifsActivity : AppCompatActivity(), OnGiphyClickListener {
                 if (dy > 0) {
                     visibleItemCount = layoutManager.childCount
                     totalItemCount = layoutManager.itemCount
-                    pastVisiblesItems = layoutManager.findFirstVisibleItemPosition()
 
-                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                    layoutManager.findFirstVisibleItemPositions(intArray)
+
+//                    println("VALUE = ${pastVisiblesItems[pastVisiblesItems.size-1]}")
+
+                    if ((visibleItemCount + intArray[0]) >= totalItemCount) {
                         viewModel.loadMore()
                     }
                 }
@@ -100,7 +102,6 @@ class TrendingGifsActivity : AppCompatActivity(), OnGiphyClickListener {
     }
 
     override fun onGiphyClick(giphy: Giphy) {
-        Toast.makeText(this, giphy.id, Toast.LENGTH_LONG).show()
         viewModel.onGiphyClicked(giphy)
     }
 
